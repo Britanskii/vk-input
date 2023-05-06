@@ -1,0 +1,15 @@
+:root {
+    /* font size */
+    --font-size-m: 12px;
+
+    /* colors */
+    --main-color: #FFFFFF;
+    --second-color: #e9ecf1;
+    --separator-color: #dce1e6;
+    --head-color: #cdd6e0;
+    --subhead-color: #626d7a;
+
+    /* borders */
+    --border-radius-m: 12px;
+    --border-radius-s: 8px;
+}

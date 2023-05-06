@@ -1,3 +1,14 @@
+.wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
 .input {
-    color: black;
+    width: 100%;
+    padding: 5px 8px 6px;
+    font-size: var(--font-size-m);
+    border: 1px solid var(--separator-color);
+    border-radius: var(--border-radius-s);
+    outline: none;
 }
