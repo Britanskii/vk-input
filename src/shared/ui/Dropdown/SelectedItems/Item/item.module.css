@@ -1,16 +1,26 @@
 .item {
+    flex-grow: 0;
+    margin-top: 2px;
+    margin-bottom: 2px;
     margin-left: 4px;
     display: flex;
     align-items: center;
     height: 80%;
     padding: 4px;
     border-radius: var(--border-radius-s);
+    color: var(--selected-color);
     background-color: var(--head-color);
 }
 
 .close {
+    transition: var(--fast-animation);
+    opacity: 0.6;
     cursor: pointer;
     margin-left: 4px;
+}
+
+.close:hover {
+    opacity: 1;
 }
 
 .active {

@@ -20,7 +20,9 @@
 }
 
 .input {
+    padding-right: 30px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     overflow: hidden;
     border: 1px solid var(--separator-color);
@@ -33,3 +35,7 @@
     border-bottom-right-radius: 0
 }
 
+.dropdown .innerInput {
+    width: 100px;
+    flex-grow: 1;
+}

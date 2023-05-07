@@ -4,13 +4,17 @@
 
     /* colors */
     --accent-color: #0077FF;
+    --selected-color: #346297;
     --main-color: #FFFFFF;
     --second-color: #e9ecf1;
     --separator-color: #dce1e6;
-    --head-color: #cdd6e0;
+    --head-color: #e5ebf1;
     --subhead-color: #626d7a;
 
     /* borders */
     --border-radius-m: 12px;
     --border-radius-s: 8px;
+
+    /* animations */
+    --fast-animation: 0.3s all ease
 }

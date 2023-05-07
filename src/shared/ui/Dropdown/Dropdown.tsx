@@ -120,7 +120,7 @@ export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 			<img src={arrow} className={s.arrow} onClick={onToggle}/>
 			<div className={s.input}>
 				<SelectedItems value={value} selectedItems={selectedItems} deleteSelectedItem={deleteSelectedItem}/>
-				<Input variant={"clear"} ref={inputRef} setValue={setValue} value={value} onClick={onOpen} name={name}/>
+				<Input className={s.innerInput} variant={"clear"} ref={inputRef} setValue={setValue} value={value} onClick={onOpen} name={name}/>
 			</div>
 			<UnsortedList list={list} setActiveIndex={setActiveIndex} activeIndex={activeIndex} onSelect={onSelect} className={s.list}/>
 		</div>

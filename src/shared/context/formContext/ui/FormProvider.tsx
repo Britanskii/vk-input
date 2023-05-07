@@ -11,12 +11,12 @@ interface FormProviderProps {
 
 export const FormContext = createContext<FormContextProps>({})
 
-export const FormProvider= (props: FormProviderProps) => {
+export const FormProvider = (props: FormProviderProps) => {
 	const { children } = props
 
 	const form = useRef({})
 
-	const setForm = (value: any) => {
+	const setForm = (value: string) => {
 		form.current = value
 	}
 

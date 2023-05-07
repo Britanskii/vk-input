@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react"
-import s from "./selectedItems.module.css"
 import { Item } from "./Item/Item"
 
 interface SelectedItemsProps {
@@ -44,13 +43,13 @@ export const SelectedItems: FC<SelectedItemsProps> = ({ value,  selectedItems, d
 	}, [selectedItems])
 
 	return (
-		<div className={s.items}>
+		<>
 			{selectedItems.map((value, index) => {
 				const active = index === selectedIndex
 
 				return <Item active={active} deleteSelectedItem={deleteSelectedItem} key={value} value={value}/>
 			})}
-		</div>
+		</>
 	)
 }
 
