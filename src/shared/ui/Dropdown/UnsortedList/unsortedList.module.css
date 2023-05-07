@@ -1,4 +1,20 @@
 .list {
-    display: flex;
+    overflow-y: scroll;
     flex-direction: column;
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: fit-content;
+    max-height: 150px;
+    list-style: none;
+    border-bottom-left-radius: var(--border-radius-s);
+    border-bottom-right-radius: var(--border-radius-s);
+    border: 1px solid var(--separator-color);
+    background-color: var(--main-color);
+    border-top: none;
+}
+
+.none {
+    padding: 6px 0 8px 9px;
+    background-color: var(--main-color);
 }

@@ -22,24 +22,22 @@ export const ListItem: FC<UnsortedListProps> = memo(({ value, onSelect, active, 
 	}
 
 	useEffect(() => {
-		if (itemRef.current) {
-			itemRef.current.addEventListener("keydown", onKeyDown)
-
-			if (active) {
-				itemRef.current.focus()
+		if (active) {
+			if (itemRef.current) {
+				itemRef.current.scrollIntoView({ behavior: "smooth", block: "end" })
 			}
+			document.addEventListener("keydown", onKeyDown)
 		}
-
 
 		return () => {
-			if (itemRef.current) {
-				itemRef.current.removeEventListener("keydown", onKeyDown)
+			if (active) {
+				document.removeEventListener("keydown", onKeyDown)
 			}
 		}
-	}, [itemRef.current, active])
+	}, [active])
 
 	return (
-		<li ref={itemRef} tabIndex={0} onClick={onValueSelect} className={`${s.item} ${className}`}>
+		<li ref={itemRef} onClick={onValueSelect} className={`${s.item} ${active ? s.active : ""} ${className}`}>
 			{value}
 		</li>
 	)

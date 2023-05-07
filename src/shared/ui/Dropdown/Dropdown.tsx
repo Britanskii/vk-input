@@ -5,6 +5,7 @@ import { Input } from "../Input/Input"
 import { UnsortedList } from "./UnsortedList/UnsortedList"
 import { useForm } from "../../context/formContext/lib/useForm"
 import { SelectedItems } from "./SelectedItems/SelectedItems"
+import arrow from "../../assets/icons/arrow_down.png"
 
 interface DropdownProps {
 	name: string
@@ -12,7 +13,7 @@ interface DropdownProps {
     className?: string
 }
 
-const mocked = ["Английский", "Русский", "Французкий", "Немецкий"]
+const mocked = ["Английский", "Русский", "Французкий", "Немецкий", "Русский1", "Французкий2", "Немецкий3"]
 
 export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 	const [isOpen, setIsOpen] = useState(false)
@@ -27,7 +28,7 @@ export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 	const onSelect = useCallback((value: string) => {
 		setActiveIndex(-1)
 		setSelectedItems(selectedItems => selectedItems = [...selectedItems, value])
-		setValue(" ")
+		setValue("")
 		setField(value)
 		setList(mocked)
 		onClose()
@@ -83,9 +84,12 @@ export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 	const onTabOpen = (event: KeyboardEvent) => {
 		const code = event.code
 
-		if (!isOpen && (code === "Tab" || code === "ArrowDown")) {
-			event.preventDefault()
+		if (!isOpen && code === "ArrowDown") {
 			onOpen()
+		}
+
+		if (isOpen && code === "Tab" || activeIndex === -1 && code === "ArrowUp") {
+			onClose()
 		}
 
 		if (value === "" && code === "Backspace") {
@@ -95,14 +99,30 @@ export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 		}
 	}
 
+	const onFilter = (query: string, arr: string[], list: string[]): string[] => {
+		const lowerCaseQuery: string = query.toLowerCase().replace(/\s/g, "")
+		return arr.filter((word: string) => {
+			const lowerCaseWord: string = word.toLowerCase().replace(/\s/g, "")
+			return lowerCaseWord.includes(lowerCaseQuery) &&  !list.includes(word)
+		})
+	}
+
+	useEffect(() => {
+		if (!isOpen && value !== "") {
+			onOpen()
+		}
+		setList(onFilter(value, mocked, selectedItems))
+	}, [value, selectedItems])
+
+
 	return (
 		<div ref={dropdownRef} className = {`${s.dropdown} ${isOpen && s.open} ${className}`}>
-			<div className={s.arrow} onClick={onToggle}>{">"}</div>
+			<img src={arrow} className={s.arrow} onClick={onToggle}/>
 			<div className={s.input}>
-				<SelectedItems selectedItems={selectedItems} deleteSelectedItem={deleteSelectedItem}/>
+				<SelectedItems value={value} selectedItems={selectedItems} deleteSelectedItem={deleteSelectedItem}/>
 				<Input variant={"clear"} ref={inputRef} setValue={setValue} value={value} onClick={onOpen} name={name}/>
 			</div>
-			<UnsortedList list={list} onOpen={onOpen} setActiveIndex={setActiveIndex} activeIndex={activeIndex} onSelect={onSelect} className={s.list}/>
+			<UnsortedList list={list} setActiveIndex={setActiveIndex} activeIndex={activeIndex} onSelect={onSelect} className={s.list}/>
 		</div>
 	)
 }

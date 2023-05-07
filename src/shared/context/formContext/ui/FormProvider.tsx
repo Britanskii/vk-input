@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useMemo, useRef } from "react"
+import { createContext, ReactNode, useMemo, useRef } from "react"
 
 export interface FormContextProps {
 	form?: any,
@@ -11,7 +11,9 @@ interface FormProviderProps {
 
 export const FormContext = createContext<FormContextProps>({})
 
-export const FormProvider: FC<FormProviderProps> = ({ children }) => {
+export const FormProvider= (props: FormProviderProps) => {
+	const { children } = props
+
 	const form = useRef({})
 
 	const setForm = (value: any) => {
@@ -19,6 +21,7 @@ export const FormProvider: FC<FormProviderProps> = ({ children }) => {
 	}
 
 	const initialValue = useMemo(() => ({ form, setForm }), [])
+
 
 	return (
 		<FormContext.Provider value={initialValue}>

@@ -52,7 +52,7 @@ const InputRef = forwardRef(<T,>(props: InputProps<T>, ref: ForwardedRef<HTMLInp
 			name={name}
 			onChange={onChange}
 			value={innerValue}
-			className={`${s[variant]} ${className} 1`}
+			className={`${s[variant]} ${className}`}
 			type="text"
 		/>
 	)

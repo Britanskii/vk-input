@@ -1,12 +1,14 @@
 import { FC, useEffect, useState } from "react"
+import s from "./selectedItems.module.css"
 import { Item } from "./Item/Item"
 
 interface SelectedItemsProps {
+	value: string
     deleteSelectedItem: (value: string) => void
 	selectedItems: string[]
 }
 
-export const SelectedItems: FC<SelectedItemsProps> = ({ selectedItems, deleteSelectedItem }) => {
+export const SelectedItems: FC<SelectedItemsProps> = ({ value,  selectedItems, deleteSelectedItem }) => {
 	const [selectedIndex, setSelectedIndex] = useState(selectedItems.length)
 
 	const leftRightNavigation = (event: KeyboardEvent) => {
@@ -21,10 +23,10 @@ export const SelectedItems: FC<SelectedItemsProps> = ({ selectedItems, deleteSel
 		}
 
 		if (code === "ArrowRight") {
-			if (selectedIndex !== selectedItems.length - 1) {
+			if (selectedIndex < selectedItems.length) {
 				setSelectedIndex(selectedIndex => selectedIndex += 1)
 			} else {
-				setSelectedIndex(0)
+				setSelectedIndex(-1)
 			}
 		}
 	}
@@ -35,16 +37,20 @@ export const SelectedItems: FC<SelectedItemsProps> = ({ selectedItems, deleteSel
 		return () => {
 			document.removeEventListener("keydown", leftRightNavigation)
 		}
-	}, [selectedIndex])
+	}, [selectedIndex, selectedItems, value])
+
+	useEffect(() => {
+		setSelectedIndex(selectedItems.length)
+	}, [selectedItems])
 
 	return (
-		<>
+		<div className={s.items}>
 			{selectedItems.map((value, index) => {
 				const active = index === selectedIndex
 
 				return <Item active={active} deleteSelectedItem={deleteSelectedItem} key={value} value={value}/>
 			})}
-		</>
+		</div>
 	)
 }
 

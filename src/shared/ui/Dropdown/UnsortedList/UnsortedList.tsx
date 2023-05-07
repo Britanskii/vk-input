@@ -5,29 +5,26 @@ import { ListItem } from "./ListItem/ListItem"
 interface UnsortedListProps {
 	activeIndex: number
 	onSelect: (value: string) => void
-	onOpen: () => void
 	setActiveIndex: Dispatch<SetStateAction<number>>
 	list: any[]
     className?: string
 }
 
-export const UnsortedList: FC<UnsortedListProps> = memo(({ onSelect, setActiveIndex, onOpen, activeIndex, list, className = "" }) => {
+export const UnsortedList: FC<UnsortedListProps> = memo(({ onSelect, setActiveIndex, activeIndex, list, className = "" }) => {
+	const isListZeroLength = list.length === 0
 
 	useEffect(() => {
-		document.addEventListener("keydown", onTabSelect)
+		document.addEventListener("keydown", onArrowSelect)
 
 		return () => {
-			document.removeEventListener("keydown", onTabSelect)
+			document.removeEventListener("keydown", onArrowSelect)
 		}
-	}, [activeIndex])
+	}, [activeIndex, list])
 
-	const onTabSelect = (event: KeyboardEvent) => {
+	const onArrowSelect = (event: KeyboardEvent) => {
 		const code = event.code
 
-		if (code === "Tab" || code === "ArrowDown") {
-			event.preventDefault()
-			onOpen()
-		}
+		if (isListZeroLength) return
 
 		if (code === "ArrowUp") {
 			if (activeIndex !== 0) {
@@ -55,6 +52,7 @@ export const UnsortedList: FC<UnsortedListProps> = memo(({ onSelect, setActiveIn
 
 				return <ListItem active={active} onSelect={onSelect} key={index} value={item}/>
 			})}
+			{isListZeroLength && <li className={s.none}>Ничего не было найдено</li>}
 		</ul>
 	)
 })

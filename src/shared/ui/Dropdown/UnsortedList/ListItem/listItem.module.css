@@ -8,7 +8,7 @@
     border-bottom: 1px solid  var(--separator-color);
 }
 
-.item:hover, .item:focus {
+.active, .item:hover {
     outline: none;
     background-color: var(--head-color);
 }
