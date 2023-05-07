@@ -4,11 +4,18 @@
     align-items: center;
 }
 
-.input {
-    width: 100%;
+.clear, .default {
     padding: 5px 8px 6px;
+    width: 100%;
     font-size: var(--font-size-m);
+    outline: none;
+}
+
+.clear {
+    border: none;
+}
+
+.default {
     border: 1px solid var(--separator-color);
     border-radius: var(--border-radius-s);
-    outline: none;
 }

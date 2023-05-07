@@ -4,6 +4,7 @@ import { FC, useCallback, useEffect, useRef, useState } from "react"
 import { Input } from "../Input/Input"
 import { UnsortedList } from "./UnsortedList/UnsortedList"
 import { useForm } from "../../context/formContext/lib/useForm"
+import { SelectedItems } from "./SelectedItems/SelectedItems"
 
 interface DropdownProps {
 	name: string
@@ -16,6 +17,8 @@ const mocked = ["Английский", "Русский", "Французкий"
 export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [value, setValue] = useState("")
+	const [list, setList] = useState(mocked)
+	const [selectedItems, setSelectedItems] = useState(["Аниме", "Ахаё"])
 	const [activeIndex, setActiveIndex] = useState(-1)
 	const dropdownRef = useRef<HTMLDivElement>(null)
 	const inputRef = useRef<HTMLInputElement>(null)
@@ -23,12 +26,18 @@ export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 
 	const onSelect = useCallback((value: string) => {
 		setActiveIndex(-1)
-		setValue(value)
+		setSelectedItems(selectedItems => selectedItems = [...selectedItems, value])
+		setValue(" ")
 		setField(value)
+		setList(mocked)
 		onClose()
 		if (inputRef.current) {
 			inputRef.current.focus()
 		}
+	}, [])
+
+	const deleteSelectedItem = useCallback((value: string) => {
+		setSelectedItems(selectedItems => selectedItems = selectedItems.filter(item => item !== value))
 	}, [])
 
 	const onToggle = () => {
@@ -58,10 +67,8 @@ export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 
 		if (isOpen) {
 			document.addEventListener("click", clickOutside)
-			document.addEventListener("keydown", onTabSelect)
 		} else {
 			document.removeEventListener("click", clickOutside)
-			document.removeEventListener("keydown", onTabSelect)
 		}
 
 		return () => {
@@ -69,10 +76,9 @@ export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 				dropdownRef.current.removeEventListener("keydown", onTabOpen)
 			}
 
-			document.removeEventListener("keydown", onTabSelect)
 			document.removeEventListener("click", clickOutside)
 		}
-	}, [isOpen, activeIndex])
+	}, [isOpen, activeIndex, selectedItems, value])
 
 	const onTabOpen = (event: KeyboardEvent) => {
 		const code = event.code
@@ -81,40 +87,22 @@ export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 			event.preventDefault()
 			onOpen()
 		}
-	}
 
-	const onTabSelect = (event: KeyboardEvent) => {
-		const code = event.code
-
-		if (!isOpen && (code === "Tab" || code === "ArrowDown")) {
-			event.preventDefault()
-			onOpen()
-		}
-
-		if (code === "ArrowUp") {
-			if (activeIndex !== 0) {
-				setActiveIndex(activeIndex => activeIndex -= 1)
-			} else {
-				setActiveIndex(mocked.length - 1)
-			}
-
-		}
-
-		if (code === "ArrowDown") {
-			if (activeIndex !== mocked.length - 1) {
-				setActiveIndex(activeIndex => activeIndex += 1)
-			} else {
-				setActiveIndex(0)
-			}
-
+		if (value === "" && code === "Backspace") {
+			const newSelectedItems = [...selectedItems]
+			newSelectedItems.pop()
+			setSelectedItems(newSelectedItems)
 		}
 	}
 
 	return (
 		<div ref={dropdownRef} className = {`${s.dropdown} ${isOpen && s.open} ${className}`}>
 			<div className={s.arrow} onClick={onToggle}>{">"}</div>
-			<Input ref={inputRef} changedValue={value} onClick={onOpen} name={name} className={isOpen && s.input}/>
-			<UnsortedList list={mocked} activeIndex={activeIndex} onSelect={onSelect} className={s.list}/>
+			<div className={s.input}>
+				<SelectedItems selectedItems={selectedItems} deleteSelectedItem={deleteSelectedItem}/>
+				<Input variant={"clear"} ref={inputRef} setValue={setValue} value={value} onClick={onOpen} name={name}/>
+			</div>
+			<UnsortedList list={list} onOpen={onOpen} setActiveIndex={setActiveIndex} activeIndex={activeIndex} onSelect={onSelect} className={s.list}/>
 		</div>
 	)
 }

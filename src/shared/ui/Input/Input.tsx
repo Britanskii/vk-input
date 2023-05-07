@@ -9,30 +9,41 @@ import {
 	useState
 } from "react"
 import { useForm } from "../../context/formContext/lib/useForm"
+import { ValueOf } from "../../../app/types/types"
 
 type HTMLInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "name" | "className">
+
+const InputVariant = {
+	CLEAR: "clear",
+	DEFAULT: "default"
+} as const
+
+type InputVariant = ValueOf<typeof InputVariant>
 
 interface InputProps<T> extends HTMLInputProps {
 	className?: string
 	name: Extract<keyof T, string>
-	changedValue?: string
+	variant?: InputVariant
+	value?: string
+	setValue?: (value: string) => void
 }
 
 const InputRef = forwardRef(<T,>(props: InputProps<T>, ref: ForwardedRef<HTMLInputElement>) => {
-	const { name, changedValue = "", className = "", ...otherProps } = props
-	const [value, setValue] = useState("")
+	const { name, variant = InputVariant.DEFAULT, className = "", value = "", setValue, ...otherProps } = props
+	const [innerValue, setInnerValue] = useState("")
 
 	const { setField } = useForm<T>(name)
 
 	const onChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
 		setField(value)
-		setValue(value)
+		setInnerValue(value)
+		setValue?.(value)
 	}
 
 	useEffect(() => {
-		setValue(changedValue)
-	}, [changedValue])
+		setInnerValue(value)
+	}, [value])
 
 	return (
 		<input
@@ -40,8 +51,8 @@ const InputRef = forwardRef(<T,>(props: InputProps<T>, ref: ForwardedRef<HTMLInp
 			ref={ref && ref}
 			name={name}
 			onChange={onChange}
-			value={value}
-			className={`${s.input} ${className} 1`}
+			value={innerValue}
+			className={`${s[variant]} ${className} 1`}
 			type="text"
 		/>
 	)

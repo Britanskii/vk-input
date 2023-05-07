@@ -1,0 +1,19 @@
+.item {
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+    height: 80%;
+    padding: 4px;
+    border-radius: var(--border-radius-s);
+    background-color: var(--head-color);
+}
+
+.close {
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+.active {
+    color: var(--main-color);
+    background-color: var(--accent-color);
+}

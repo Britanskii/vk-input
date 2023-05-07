@@ -28,6 +28,15 @@
 }
 
 .input {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid var(--separator-color);
+    border-radius: var(--border-radius-s);
+
+}
+
+.open .input {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0
 }

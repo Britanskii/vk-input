@@ -11,5 +11,5 @@ export const useForm = <T>(field: UseForm<T>) => {
 		setForm?.(newValues)
 	}
 
-	return { values: form, setField }
+	return { values: form.current, setField }
 }
