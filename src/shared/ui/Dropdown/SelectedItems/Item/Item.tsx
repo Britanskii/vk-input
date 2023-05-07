@@ -2,7 +2,7 @@ import s from "./item.module.css"
 
 import { FC, memo, useEffect } from "react"
 
-import close from "../../../../assets/icons/close.svg"
+import { ReactComponent as Close } from "../../../../assets/icons/close.svg"
 
 interface ItemProps {
 	deleteSelectedItem: (value: string) => void
@@ -35,8 +35,9 @@ export const Item: FC<ItemProps> = memo(({ value, active, deleteSelectedItem }) 
 	}, [active])
 
 	return (
-		<div className={`${s.item} ${active ? s.active : ""}`}>{value}
-			<img onClick={onDeleteItem} className={s.close} src={close}/>
+		<div className={`${s.item} ${active ? s.active : ""}`}>
+			{value}
+			<Close onClick={onDeleteItem} className={s.close}/>
 		</div>
 	)
 })

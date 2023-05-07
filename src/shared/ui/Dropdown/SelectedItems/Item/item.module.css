@@ -13,17 +13,17 @@
 }
 
 .close {
-    transition: var(--fast-animation);
     opacity: 0.6;
     cursor: pointer;
     margin-left: 4px;
 }
 
 .close:hover {
+    transition: var(--fast-animation);
     opacity: 1;
 }
 
 .active {
     color: var(--main-color);
-    background-color: var(--accent-color);
+    background-color: var(--secondary-color);
 }
