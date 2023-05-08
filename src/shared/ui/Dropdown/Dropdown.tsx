@@ -9,36 +9,43 @@ import arrow from "../../assets/icons/arrow_down.png"
 
 interface DropdownProps {
 	name: string
+	initialList: IListItem[]
 	label?: string
     className?: string
 }
 
-const mocked = ["Английский", "Русский", "Французкий", "Немецкий", "Русский1", "Французкий2", "Немецкий3"]
+export interface IListItem {
+	id: number
+	value: string
+}
 
-export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
+export const Dropdown: FC<DropdownProps> = ({ name, initialList, className = "" }) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [value, setValue] = useState("")
-	const [list, setList] = useState(mocked)
-	const [selectedItems, setSelectedItems] = useState(["Аниме", "Ахаё"])
+	const [list, setList] = useState<IListItem[]>(initialList)
+	const [caretPosition, setCaretPosition] = useState(0)
+	const [selectedItems, setSelectedItems] = useState<IListItem[]>([])
 	const [activeIndex, setActiveIndex] = useState(-1)
 	const dropdownRef = useRef<HTMLDivElement>(null)
 	const inputRef = useRef<HTMLInputElement>(null)
 	const { setField } = useForm(name)
+	const isDisallowNavigation = caretPosition !== 0 && !!value
+	const isPrintingAndClosed = !isOpen && value !== ""
 
-	const onSelect = useCallback((value: string) => {
+	const onSelect = useCallback((selectedItem: IListItem) => {
 		setActiveIndex(-1)
-		setSelectedItems(selectedItems => selectedItems = [...selectedItems, value])
+		setSelectedItems(selectedItems => selectedItems = [...selectedItems, selectedItem])
 		setValue("")
 		setField(value)
-		setList(mocked)
+		setList(initialList)
 		onClose()
 		if (inputRef.current) {
 			inputRef.current.focus()
 		}
 	}, [])
 
-	const deleteSelectedItem = useCallback((value: string) => {
-		setSelectedItems(selectedItems => selectedItems = selectedItems.filter(item => item !== value))
+	const deleteSelectedItem = useCallback((id: number) => {
+		setSelectedItems(selectedItems => selectedItems = selectedItems.filter((item) => item.id !== id))
 	}, [])
 
 	const onToggle = () => {
@@ -61,6 +68,29 @@ export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 		}
 	}
 
+	const onTabOpen = (event: KeyboardEvent) => {
+		const code = event.code
+
+		if (!isOpen && code === "ArrowDown") {
+			onOpen()
+		}
+
+		if (isOpen && code === "Tab" || activeIndex === -1 && code === "ArrowUp") {
+			onClose()
+		}
+	}
+
+	const filterListItem = (query: string,  initialList: IListItem[],  selectedList: IListItem[], ): IListItem[] => {
+		const editedQuery = query.toLowerCase().replace(/\s/g, "")
+		return  initialList.filter(({ value, id }) => {
+			const editedValue = value.toLowerCase().replace(/\s/g, "")
+
+			const isNoExisted = !selectedList.some((item) => item.id === id)
+
+			return editedValue.includes(editedQuery) && isNoExisted
+		})
+	}
+
 	useEffect(() => {
 		if (dropdownRef.current) {
 			dropdownRef.current.addEventListener("keydown", onTabOpen)
@@ -81,48 +111,23 @@ export const Dropdown: FC<DropdownProps> = ({ name, className = "" }) => {
 		}
 	}, [isOpen, activeIndex, selectedItems, value])
 
-	const onTabOpen = (event: KeyboardEvent) => {
-		const code = event.code
-
-		if (!isOpen && code === "ArrowDown") {
-			onOpen()
-		}
-
-		if (isOpen && code === "Tab" || activeIndex === -1 && code === "ArrowUp") {
-			onClose()
-		}
-
-		if (value === "" && code === "Backspace") {
-			const newSelectedItems = [...selectedItems]
-			newSelectedItems.pop()
-			setSelectedItems(newSelectedItems)
-		}
-	}
-
-	const onFilter = (query: string, arr: string[], list: string[]): string[] => {
-		const lowerCaseQuery: string = query.toLowerCase().replace(/\s/g, "")
-		return arr.filter((word: string) => {
-			const lowerCaseWord: string = word.toLowerCase().replace(/\s/g, "")
-			return lowerCaseWord.includes(lowerCaseQuery) &&  !list.includes(word)
-		})
-	}
-
 	useEffect(() => {
-		if (!isOpen && value !== "") {
+		if (isPrintingAndClosed) {
 			onOpen()
 		}
-		setList(onFilter(value, mocked, selectedItems))
-	}, [value, selectedItems])
 
+		setList(filterListItem(value, initialList, selectedItems ))
+	}, [value, selectedItems, initialList])
 
 	return (
 		<div ref={dropdownRef} className = {`${s.dropdown} ${isOpen && s.open} ${className}`}>
-			<img src={arrow} className={s.arrow} onClick={onToggle}/>
+			<img src={arrow} className={s.arrow} onClick={onToggle} alt={"close"}/>
 			<div className={s.input}>
-				<SelectedItems value={value} selectedItems={selectedItems} deleteSelectedItem={deleteSelectedItem}/>
-				<Input className={s.innerInput} variant={"clear"} ref={inputRef} setValue={setValue} value={value} onClick={onOpen} name={name}/>
+				<SelectedItems inputRef={inputRef} setSelectedItems={setSelectedItems} isDisallowNavigation={isDisallowNavigation} selectedItems={selectedItems} deleteSelectedItem={deleteSelectedItem}/>
+				<Input setCaretPosition={setCaretPosition} className={s.innerInput} variant={"clear"} ref={inputRef} setValue={setValue} value={value} onClick={onOpen} name={name}/>
 			</div>
-			<UnsortedList list={list} setActiveIndex={setActiveIndex} activeIndex={activeIndex} onSelect={onSelect} className={s.list}/>
+			{isOpen &&
+                <UnsortedList inputRef={inputRef} list={list} setActiveIndex={setActiveIndex} activeIndex={activeIndex} onSelect={onSelect} className={s.list}/>}
 		</div>
 	)
 }

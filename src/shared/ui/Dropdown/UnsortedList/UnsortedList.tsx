@@ -1,23 +1,30 @@
-import { Dispatch, FC, memo, SetStateAction, useEffect } from "react"
+import { Dispatch, FC, memo, RefObject, SetStateAction, useEffect, useRef } from "react"
 import s from "./unsortedList.module.css"
 import { ListItem } from "./ListItem/ListItem"
+import { IListItem } from "../Dropdown"
 
 interface UnsortedListProps {
 	activeIndex: number
-	onSelect: (value: string) => void
+	inputRef: RefObject<HTMLInputElement>
+	onSelect: (item: IListItem) => void
 	setActiveIndex: Dispatch<SetStateAction<number>>
-	list: any[]
+	list: IListItem[]
     className?: string
 }
 
-export const UnsortedList: FC<UnsortedListProps> = memo(({ onSelect, setActiveIndex, activeIndex, list, className = "" }) => {
+export const UnsortedList: FC<UnsortedListProps> = memo(({ onSelect, inputRef, setActiveIndex, activeIndex, list, className = "" }) => {
+	const unsortedRef = useRef(null)
 	const isListZeroLength = list.length === 0
 
 	useEffect(() => {
-		document.addEventListener("keydown", onArrowSelect)
+		if (inputRef.current) {
+			inputRef.current.addEventListener("keydown", onArrowSelect)
+		}
 
 		return () => {
-			document.removeEventListener("keydown", onArrowSelect)
+			if (inputRef.current) {
+				inputRef.current.removeEventListener("keydown", onArrowSelect)
+			}
 		}
 	}, [activeIndex, list])
 
@@ -46,12 +53,11 @@ export const UnsortedList: FC<UnsortedListProps> = memo(({ onSelect, setActiveIn
 	}
 
 	return (
-		<ul className={`${s.list} ${className}`}>
+		<ul ref={unsortedRef} className={`${s.list} ${className}`}>
 			{list.map((item, index) => {
 				const active = activeIndex === index
 
-				return <ListItem active={active} onSelect={onSelect} key={index} value={item}/>
-			})}
+				return <ListItem inputRef={inputRef} unsortedRef={unsortedRef} setActiveIndex={setActiveIndex} active={active} index={index} onSelect={onSelect} key={item.id} item={item}/>})}
 			{isListZeroLength && <li className={s.none}>Ничего не было найдено</li>}
 		</ul>
 	)

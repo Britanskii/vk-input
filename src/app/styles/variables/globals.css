@@ -15,6 +15,7 @@
     /* borders */
     --border-radius-m: 12px;
     --border-radius-s: 8px;
+    --border-radius-t: 4px;
 
     /* animations */
     --fast-animation: 0.3s all ease

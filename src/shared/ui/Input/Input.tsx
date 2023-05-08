@@ -26,10 +26,11 @@ interface InputProps<T> extends HTMLInputProps {
 	variant?: InputVariant
 	value?: string
 	setValue?: (value: string) => void
+	setCaretPosition?: (value: number) => void
 }
 
 const InputRef = forwardRef(<T,>(props: InputProps<T>, ref: ForwardedRef<HTMLInputElement>) => {
-	const { name, variant = InputVariant.DEFAULT, className = "", value = "", setValue, ...otherProps } = props
+	const { name, variant = InputVariant.DEFAULT, className = "",  value = "", setValue, setCaretPosition, ...otherProps } = props
 	const [innerValue, setInnerValue] = useState("")
 
 	const { setField } = useForm<T>(name)
@@ -45,11 +46,16 @@ const InputRef = forwardRef(<T,>(props: InputProps<T>, ref: ForwardedRef<HTMLInp
 		setInnerValue(value)
 	}, [value])
 
+	const onCaretClick = (event: any) => {
+		setCaretPosition?.(event?.target?.selectionStart || 0)
+	}
+
 	return (
 		<input
 			{...otherProps}
 			ref={ref && ref}
 			name={name}
+			onSelect={onCaretClick}
 			onChange={onChange}
 			value={innerValue}
 			className={`${s[variant]} ${className}`}

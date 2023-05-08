@@ -1,17 +1,35 @@
-import { FC, memo, useEffect, useRef } from "react"
+import { FC, memo, RefObject, useEffect, useRef } from "react"
 import s from "./listItem.module.css"
+import { IListItem } from "../../Dropdown"
 
 interface UnsortedListProps {
+	unsortedRef: RefObject<HTMLLIElement>
+	inputRef: RefObject<HTMLInputElement>
+	index: number
 	active: boolean
-	value: string
-	onSelect: (value: string) => void
+	item: IListItem
+	onSelect: (item: IListItem) => void
+	setActiveIndex: (index: number) => void
 	className?: string
 }
 
-export const ListItem: FC<UnsortedListProps> = memo(({ value, onSelect, active, className = "" }) => {
-	const itemRef = useRef<HTMLLIElement>(null)
+const NAVIGATION_OFFSET = 10
 
-	const onValueSelect = () => onSelect(value)
+export const ListItem: FC<UnsortedListProps> = memo(({
+	item,
+	unsortedRef,
+	inputRef,
+	setActiveIndex,
+	onSelect,
+	active,
+	index,
+	className = ""
+}) => {
+	const itemRef = useRef<HTMLLIElement>(null)
+	const isActiveAndMounted = active && inputRef.current && itemRef.current && unsortedRef.current
+
+	const onMouseEnter = () => setActiveIndex(index)
+	const onValueSelect = () => onSelect(item)
 
 	const onKeyDown = (event: KeyboardEvent) => {
 		const code = event.code
@@ -22,23 +40,31 @@ export const ListItem: FC<UnsortedListProps> = memo(({ value, onSelect, active, 
 	}
 
 	useEffect(() => {
-		if (active) {
-			if (itemRef.current) {
-				itemRef.current.scrollIntoView({ behavior: "smooth", block: "end" })
+		if (isActiveAndMounted) {
+			inputRef.current.addEventListener("keydown", onKeyDown)
+
+			const listBounds = unsortedRef.current.getBoundingClientRect()
+			const itemBounds = itemRef.current.getBoundingClientRect()
+
+			if (itemBounds.y + NAVIGATION_OFFSET > listBounds.bottom) {
+				itemRef.current.scrollIntoView({ block: "end" })
 			}
-			document.addEventListener("keydown", onKeyDown)
+			if (itemBounds.y - NAVIGATION_OFFSET < listBounds.y) {
+				itemRef.current.scrollIntoView()
+			}
 		}
 
 		return () => {
-			if (active) {
-				document.removeEventListener("keydown", onKeyDown)
+			if (isActiveAndMounted) {
+				inputRef.current.removeEventListener("keydown", onKeyDown)
 			}
 		}
-	}, [active])
+	}, [isActiveAndMounted])
 
 	return (
-		<li ref={itemRef} onClick={onValueSelect} className={`${s.item} ${active ? s.active : ""} ${className}`}>
-			{value}
+		<li ref={itemRef} onMouseEnter={onMouseEnter} onClick={onValueSelect}
+			className={`${s.item} ${active ? s.active : ""} ${className}`}>
+			{item.value}
 		</li>
 	)
 })
