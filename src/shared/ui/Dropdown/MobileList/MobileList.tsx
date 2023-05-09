@@ -24,7 +24,7 @@ export const MobileList: FC<MobileListProps> = ({ title, list, selectedItems, se
 	const onReturnSelectedItemsState = useCallback( () => {
 		setValue("")
 		setInnerSelectedItems(selectedItems)
-	}, [])
+	}, [innerSelectedItems])
 
 	const deleteInnerSelectedItem = useCallback((id: number) => {
 		setInnerSelectedItems(innerSelectedItems => innerSelectedItems = innerSelectedItems.filter((item) => item.id !== id))
@@ -33,7 +33,7 @@ export const MobileList: FC<MobileListProps> = ({ title, list, selectedItems, se
 	const onSubmit = useCallback(() => {
 		setValue("")
 		setSelectedItems(innerSelectedItems)
-	}, [])
+	}, [innerSelectedItems])
 
 	const onSelect = useCallback((item: IListItem) => {
 		setInnerSelectedItems(selectedItems => selectedItems = [...selectedItems, item])
