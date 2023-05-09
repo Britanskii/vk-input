@@ -54,7 +54,6 @@
     border-radius: 12px;
     background-color: var(--second-color);
     transition: 0.3s transform;
-    transform: translateX(-100%);
 }
 
 .opened {
@@ -62,11 +61,6 @@
     opacity: 1;
     z-index: var(--modal-z-index);
 }
-
-.opened .content {
-    transform: translateX(0);
-}
-
 
 .isClosing .overlay {
     transition: 0.3s background;
