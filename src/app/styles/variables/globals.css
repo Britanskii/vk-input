@@ -1,6 +1,8 @@
 :root {
     /* font size */
     --font-size-m: 12px;
+    --font-size-b: 17px;
+    --font-size-l: 21px;
 
     /* colors */
     --accent-color: #0077FF;
@@ -11,11 +13,16 @@
     --separator-color: #dce1e6;
     --head-color: #e5ebf1;
     --subhead-color: #626d7a;
+    --overlay-color: rgba(0, 0, 0, 0.3);
 
     /* borders */
     --border-radius-m: 12px;
     --border-radius-s: 8px;
     --border-radius-t: 4px;
+
+    /* z-index */
+    --drop-z-index: 2;
+    --modal-z-index: 3;
 
     /* animations */
     --fast-animation: 0.3s all ease

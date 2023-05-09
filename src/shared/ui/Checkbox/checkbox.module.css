@@ -1,0 +1,22 @@
+.checkbox {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--separator-color);
+}
+
+.checkbox_active {
+    border: 2px solid var(--secondary-color);
+    background-color: var(--secondary-color);
+}
+
+.arrow {
+    pointer-events: none;
+    margin-top: 1px;
+    width: 100%;
+    color: var(--main-color);
+}

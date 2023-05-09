@@ -1,16 +1,20 @@
-
-import { FC } from "react"
+import s from "./label.module.css"
+import { FC, ReactNode } from "react"
 
 interface LabelProps {
-    className?: string
+	label?: string
+	name: string
+	children: ReactNode
 }
 
-export const Label: FC<LabelProps> = (props) => {
-	const { className = "" } = props
+export const Label: FC<LabelProps> = ({ children, label, name }) => {
 
 	return (
-		<div className = {"classNames([s.label, className])"}>
-
-		</div>
+		<label htmlFor={name} className={`${s.label}`}>
+			{label &&
+                <div className={s.text}>{label}</div>
+			}
+			{children}
+		</label>
 	)
 }

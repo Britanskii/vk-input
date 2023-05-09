@@ -8,9 +8,10 @@ interface SelectedItemsProps {
 	selectedItems: IListItem[]
 	setSelectedItems: (value: IListItem[]) => void
 	inputRef: RefObject<HTMLInputElement>
+	onClick: () => void
 }
 
-export const SelectedItems: FC<SelectedItemsProps> = ({ isDisallowNavigation, inputRef,  selectedItems, setSelectedItems, deleteSelectedItem }) => {
+export const SelectedItems: FC<SelectedItemsProps> = ({ isDisallowNavigation, onClick, inputRef,  selectedItems, setSelectedItems, deleteSelectedItem }) => {
 	const [selectedIndex, setSelectedIndex] = useState(-1)
 
 	const leftRightNavigation = (event: KeyboardEvent) => {
@@ -68,7 +69,7 @@ export const SelectedItems: FC<SelectedItemsProps> = ({ isDisallowNavigation, in
 			{selectedItems.map(({ value, id }, index) => {
 				const active = index === selectedIndex
 
-				return <Item index={index} inputRef={inputRef} setSelectedIndex={setSelectedIndex} active={active} deleteSelectedItem={deleteSelectedItem} id={id} key={id} value={value}/>
+				return <Item onClick={onClick} index={index} inputRef={inputRef} setSelectedIndex={setSelectedIndex} active={active} deleteSelectedItem={deleteSelectedItem} id={id} key={id} value={value}/>
 			})}
 		</>
 	)

@@ -26,7 +26,6 @@ export const ListItem: FC<UnsortedListProps> = memo(({
 	className = ""
 }) => {
 	const itemRef = useRef<HTMLLIElement>(null)
-	const isActiveAndMounted = active && inputRef.current && itemRef.current && unsortedRef.current
 
 	const onMouseEnter = () => setActiveIndex(index)
 	const onValueSelect = () => onSelect(item)
@@ -40,6 +39,8 @@ export const ListItem: FC<UnsortedListProps> = memo(({
 	}
 
 	useEffect(() => {
+		const isActiveAndMounted = active && !!inputRef.current && !!itemRef.current && !!unsortedRef.current
+
 		if (isActiveAndMounted) {
 			inputRef.current.addEventListener("keydown", onKeyDown)
 
@@ -59,7 +60,7 @@ export const ListItem: FC<UnsortedListProps> = memo(({
 				inputRef.current.removeEventListener("keydown", onKeyDown)
 			}
 		}
-	}, [isActiveAndMounted])
+	}, [active])
 
 	return (
 		<li ref={itemRef} onMouseEnter={onMouseEnter} onClick={onValueSelect}

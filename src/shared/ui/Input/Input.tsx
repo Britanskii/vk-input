@@ -53,6 +53,7 @@ const InputRef = forwardRef(<T,>(props: InputProps<T>, ref: ForwardedRef<HTMLInp
 	return (
 		<input
 			{...otherProps}
+			autoComplete="off"
 			ref={ref && ref}
 			name={name}
 			onSelect={onCaretClick}

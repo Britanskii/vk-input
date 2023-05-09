@@ -1,10 +1,11 @@
 .dropdown {
+    width: 100%;
     position: relative;
 }
 
 .dropdown.open .list {
     display: flex;
-    z-index: 1;
+    z-index: var(--drop-z-index);
 }
 
 .dropdown.open .arrow {
@@ -20,6 +21,7 @@
 }
 
 .input {
+    width: 100%;
     padding-right: 30px;
     display: flex;
     flex-wrap: wrap;

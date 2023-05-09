@@ -1,5 +1,5 @@
 .list {
-    overflow-y: scroll;
+    overflow-y: auto;
     flex-direction: column;
     display: none;
     position: absolute;

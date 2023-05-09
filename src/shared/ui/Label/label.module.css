@@ -1,0 +1,10 @@
+.label {
+    display: flex;
+    gap: 10px;
+}
+
+.text {
+    margin-top: 5px;
+    width: 20%;
+    text-align: right;
+}

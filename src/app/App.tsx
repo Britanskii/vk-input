@@ -7,6 +7,7 @@ import { Input } from "../shared/ui"
 import { Album, getAlbums } from "../shared/services/placeholder/getAlbums"
 import { parseToDropdownData } from "../shared/lib/parseToDropdownData"
 import { getUsers, User } from "../shared/services/placeholder/getUsers"
+import { Label } from "../shared/ui/Label/Label"
 
 const App = () => {
 	const [albumList, setAlbumList] = useState<IListItem[]>([])
@@ -24,9 +25,11 @@ const App = () => {
 	return(
 		<div className={s.app}>
 			<FormProvider>
-				<Input name={"name"}/>
-				<Dropdown initialList={albumList} name={"drop"}/>
-				<Dropdown initialList={userList} name={"drop"}/>
+				<Label label={"Имя"} name={"name"}>
+					<Input placeholder={"Ваше имя"} name={"name"}/>
+				</Label>
+				<Dropdown label={"Цитаты"} placeholder={"Выбор цитаты"} initialList={albumList} name={"drop"}/>
+				<Dropdown label={"Знакомые"}  placeholder={"Выбор знакомого"} initialList={userList} name={"drop"}/>
 			</FormProvider>
 		</div>
 	)

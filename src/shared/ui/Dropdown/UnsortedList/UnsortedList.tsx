@@ -34,21 +34,15 @@ export const UnsortedList: FC<UnsortedListProps> = memo(({ onSelect, inputRef, s
 		if (isListZeroLength) return
 
 		if (code === "ArrowUp") {
-			if (activeIndex !== 0) {
+			if (activeIndex > 0) {
 				setActiveIndex(activeIndex => activeIndex -= 1)
-			} else {
-				setActiveIndex(list.length - 1)
 			}
-
 		}
 
 		if (code === "ArrowDown") {
 			if (activeIndex !== list.length - 1) {
 				setActiveIndex(activeIndex => activeIndex += 1)
-			} else {
-				setActiveIndex(0)
 			}
-
 		}
 	}
 

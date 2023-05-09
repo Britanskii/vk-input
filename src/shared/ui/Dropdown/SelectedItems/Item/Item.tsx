@@ -1,6 +1,6 @@
 import s from "./item.module.css"
 
-import { FC, memo, RefObject, useEffect } from "react"
+import { FC, memo, MouseEvent, RefObject, useCallback, useEffect } from "react"
 
 import { ReactComponent as Close } from "../../../../assets/icons/close.svg"
 
@@ -11,14 +11,17 @@ interface ItemProps {
 	active: boolean
 	index: number
 	inputRef: RefObject<HTMLInputElement>
+	onClick: () => void
 	setSelectedIndex: (index: number) => void
 }
 
-export const Item: FC<ItemProps> = memo(({ value, inputRef,setSelectedIndex, index, id, active, deleteSelectedItem }) => {
+export const Item: FC<ItemProps> = memo(({ value, inputRef, onClick, setSelectedIndex, index, id, active, deleteSelectedItem }) => {
 
 	const onDeleteItem = () => deleteSelectedItem(id)
 
-	const onSelectItem = () => {
+	const onSelectItem = (event: MouseEvent<HTMLDivElement> ) => {
+		event.stopPropagation()
+		onClick()
 		setSelectedIndex(index)
 	}
 
