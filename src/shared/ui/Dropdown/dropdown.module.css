@@ -9,6 +9,7 @@
 }
 
 .button {
+    cursor: pointer;
     z-index: 1;
     background-color: transparent;
     right: 10px;
