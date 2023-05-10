@@ -14,3 +14,11 @@
     opacity: 0.8;
     outline: none;
 }
+
+@media (max-width: 800px) {
+    .button {
+        padding: 0 20px;
+        height: 42px;
+        font-size: var(--font-size-b);
+    }
+}
