@@ -70,7 +70,7 @@ export const MobileList: FC<MobileListProps> = ({ title,  list, name, selectedIt
 
 	return (
 		<Modal title={title} full={true} isOpen={isOpen} onClose={onReturnSelectedItemsState} onSubmit={onSubmit}>
-			<Input icon={<SearchIcon className={s.icon}/>} ref={inputRef} placeholder={"Search"} value={value} setValue={setValue} name={"name"} className={s.input}/>
+			<Input icon={<SearchIcon className={s.icon}/>} ref={inputRef} placeholder={"Search"} value={value} setValue={setValue} className={s.input}/>
 			<ul className={s.list}>
 				{firstSelectedItemsList.map((item) => {
 					const active = 	!!innerSelectedItems.find(selected => selected.id === item.id)
