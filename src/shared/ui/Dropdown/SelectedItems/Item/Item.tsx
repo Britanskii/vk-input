@@ -1,8 +1,9 @@
 import s from "./item.module.css"
 
-import { FC, memo, MouseEvent, RefObject, useCallback, useEffect } from "react"
+import { FC, memo, MouseEvent, RefObject, useEffect } from "react"
 
 import { ReactComponent as Close } from "../../../../assets/icons/close.svg"
+import { EventCode } from "../../../../../app/types/eventCode"
 
 interface ItemProps {
 	deleteSelectedItem: (id: number) => void
@@ -26,7 +27,7 @@ export const Item: FC<ItemProps> = memo(({ value, inputRef, onClick, setSelected
 	}
 
 	const changeItem = (event: KeyboardEvent) => {
-		const code = event.code
+		const code = event.code as EventCode
 
 		if (code === "Delete") {
 			onDeleteItem()

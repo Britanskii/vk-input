@@ -20,6 +20,7 @@ module.exports = {
 		}],
 		"@typescript-eslint/no-non-null-assertion": "off",
 		"@typescript-eslint/no-explicit-any": "off",
+		"@typescript-eslint/no-this-alias": "off",
 		"react/react-in-jsx-scope": "off",
 		"indent": ["error", "tab"],
 		"linebreak-style": ["error", "windows"],

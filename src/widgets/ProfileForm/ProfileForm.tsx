@@ -1,15 +1,10 @@
 import s from "./profileForm.module.css"
 
 import React, { FC, useEffect, useState } from "react"
-
-import { FormProvider } from "../../shared/context/formContext/ui/FormProvider"
-import { Label } from "../../shared/ui/Label/Label"
-import { Input } from "../../shared/ui"
-import { Dropdown, IListItem } from "../../shared/ui/Dropdown/Dropdown"
-import { SubmitButton } from "../../shared/ui/SubmitButton/SubmitButton"
-import { Album, getAlbums } from "../../shared/services/placeholder/getAlbums"
-import { parseToDropdownData } from "../../shared/lib/parseToDropdownData"
-import { getUsers, User } from "../../shared/services/placeholder/getUsers"
+import { Dropdown, IListItem, Input, SubmitButton, Label } from "shared/ui"
+import { Album, getAlbums, getUsers, User } from "shared/services"
+import { parseToDropdownData } from "shared/lib"
+import { FormProvider } from "shared/context"
 
 interface ProfileFormProps {
     className?: string

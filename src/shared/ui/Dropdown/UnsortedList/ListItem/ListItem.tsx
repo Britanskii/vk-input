@@ -1,6 +1,7 @@
 import { FC, memo, RefObject, useEffect, useRef } from "react"
 import s from "./listItem.module.css"
 import { IListItem } from "../../Dropdown"
+import { EventCode } from "../../../../../app/types/eventCode"
 
 interface UnsortedListProps {
 	unsortedRef: RefObject<HTMLLIElement>
@@ -31,9 +32,10 @@ export const ListItem: FC<UnsortedListProps> = memo(({
 	const onValueSelect = () => onSelect(item)
 
 	const onKeyDown = (event: KeyboardEvent) => {
-		const code = event.code
+		const code = event.code as EventCode
 
 		if (code === "Enter" || code === "Space") {
+			event.preventDefault()
 			onValueSelect()
 		}
 	}

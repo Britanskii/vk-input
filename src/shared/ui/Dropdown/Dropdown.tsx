@@ -8,7 +8,9 @@ import { SelectedItems } from "./SelectedItems/SelectedItems"
 import arrow from "../../assets/icons/arrow_down.png"
 import { Label } from "../Label/Label"
 import { MobileList } from "./MobileList/MobileList"
-import { useDevice } from "../../lib/useDevice/useDevice"
+import { useDevice } from "../../lib"
+import { EventCode } from "../../../app/types/eventCode"
+import { useDebounce } from "../../lib/useDebounce/useDebounce"
 
 interface DropdownProps {
 	name: string
@@ -35,6 +37,7 @@ export const Dropdown: FC<DropdownProps> = ({ name, initialList, label, limit = 
 	const inputRef = useRef<HTMLInputElement>(null)
 	const device = useDevice()
 	const { setField } = useForm(name)
+	const debouncedValue = useDebounce(value)
 	const isDisallowNavigation = caretPosition !== 0 && !!value
 	const isPrintingAndClosed = !isOpen && value !== ""
 	const isNothingSelected = selectedItems.length === 0
@@ -48,10 +51,10 @@ export const Dropdown: FC<DropdownProps> = ({ name, initialList, label, limit = 
 		})
 		setValue("")
 		setList(initialList)
-		onClose()
 		if (inputRef.current) {
 			inputRef.current.focus()
 		}
+		onClose()
 	}, [selectedItems])
 
 	const deleteSelectedItem = useCallback((id: number) => {
@@ -91,7 +94,7 @@ export const Dropdown: FC<DropdownProps> = ({ name, initialList, label, limit = 
 	}
 
 	const onTabOpen = (event: KeyboardEvent) => {
-		const code = event.code
+		const code = event.code as EventCode
 
 		if (!isOpen && code === "ArrowDown") {
 			onOpen()
@@ -149,9 +152,9 @@ export const Dropdown: FC<DropdownProps> = ({ name, initialList, label, limit = 
 		}
 
 		if (device === "DESKTOP") {
-			filterAndSetList(value)
+			filterAndSetList(debouncedValue)
 		}
-	}, [value, selectedItems, initialList])
+	}, [debouncedValue, selectedItems, initialList])
 
 	useEffect(() => {
 		setList(initialList)

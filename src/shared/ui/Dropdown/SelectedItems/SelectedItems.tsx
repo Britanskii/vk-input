@@ -1,6 +1,7 @@
 import { FC, RefObject, useEffect, useState } from "react"
 import { Item } from "./Item/Item"
 import { IListItem } from "../Dropdown"
+import { EventCode } from "../../../../app/types/eventCode"
 
 interface SelectedItemsProps {
 	isDisallowNavigation: boolean
@@ -15,7 +16,7 @@ export const SelectedItems: FC<SelectedItemsProps> = ({ isDisallowNavigation, on
 	const [selectedIndex, setSelectedIndex] = useState(-1)
 
 	const leftRightNavigation = (event: KeyboardEvent) => {
-		const code = event.code
+		const code = event.code as EventCode
 
 		if (isDisallowNavigation) {
 			setSelectedIndex(-1)
@@ -59,10 +60,6 @@ export const SelectedItems: FC<SelectedItemsProps> = ({ isDisallowNavigation, on
 			}
 		}
 	}, [selectedIndex, selectedItems, isDisallowNavigation])
-
-	useEffect(() => {
-		setSelectedIndex(selectedItems.length)
-	}, [selectedItems])
 
 	return (
 		<>

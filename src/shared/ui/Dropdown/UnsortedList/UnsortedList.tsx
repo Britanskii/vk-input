@@ -2,6 +2,7 @@ import { Dispatch, FC, memo, RefObject, SetStateAction, useEffect, useRef } from
 import s from "./unsortedList.module.css"
 import { ListItem } from "./ListItem/ListItem"
 import { IListItem } from "../Dropdown"
+import { EventCode } from "../../../../app/types/eventCode"
 
 interface UnsortedListProps {
 	activeIndex: number
@@ -29,7 +30,7 @@ export const UnsortedList: FC<UnsortedListProps> = memo(({ onSelect, inputRef, s
 	}, [activeIndex, list])
 
 	const onArrowSelect = (event: KeyboardEvent) => {
-		const code = event.code
+		const code = event.code as EventCode
 
 		if (isListZeroLength) return
 

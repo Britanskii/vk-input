@@ -21,4 +21,8 @@
         height: 42px;
         font-size: var(--font-size-b);
     }
+
+    .button:hover, .button:focus {
+        outline: initial;
+    }
 }

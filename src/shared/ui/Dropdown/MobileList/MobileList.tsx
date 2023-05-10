@@ -7,6 +7,7 @@ import { IListItem } from "../Dropdown"
 import { MobileListItem } from "./MobileListItem/MobileListItem"
 import { ReactComponent as SearchIcon } from "../../../assets/icons/search.svg"
 import { useForm } from "../../../context/formContext/lib/useForm"
+import { useDebounce } from "../../../lib/useDebounce/useDebounce"
 
 interface MobileListProps {
     title: string
@@ -30,6 +31,7 @@ export const MobileList: FC<MobileListProps> = ({ title,  list, name, selectedIt
 	const [firstSelectedItemsList, setFirstSelectedItemsList] = useState<IListItem[]>(list)
 	const [value, setValue] = useState("")
 	const inputRef = useRef<HTMLInputElement>(null)
+	const debouncedValue = useDebounce(value, 100)
 
 	const { setField } = useForm(name)
 
@@ -52,8 +54,8 @@ export const MobileList: FC<MobileListProps> = ({ title,  list, name, selectedIt
 	}, [innerSelectedItems])
 
 	useEffect(() => {
-		onChange(value)
-	}, [value])
+		onChange(debouncedValue)
+	}, [debouncedValue])
 
 	useEffect(() => {
 		setInnerSelectedItems(selectedItems)

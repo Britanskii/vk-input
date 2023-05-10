@@ -3,7 +3,7 @@ import s from "./modal.module.css"
 import { FC, ReactNode, MouseEvent, useState, useRef, useEffect } from "react"
 
 import { Portal } from "../Portal/Portal"
-import { classNames } from "../../lib/classNames/classNames"
+import { classNames } from "../../lib"
 
 interface ModalProps {
     className?: string
