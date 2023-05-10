@@ -31,9 +31,9 @@ export const Dropdown: FC<DropdownProps> = ({ name, initialList, label, limit = 
 	const [caretPosition, setCaretPosition] = useState(0)
 	const [selectedItems, setSelectedItems] = useState<IListItem[]>([])
 	const [activeIndex, setActiveIndex] = useState(0)
-	const device = useDevice()
 	const dropdownRef = useRef<HTMLDivElement>(null)
 	const inputRef = useRef<HTMLInputElement>(null)
+	const device = useDevice()
 	const { setField } = useForm(name)
 	const isDisallowNavigation = caretPosition !== 0 && !!value
 	const isPrintingAndClosed = !isOpen && value !== ""
@@ -41,18 +41,25 @@ export const Dropdown: FC<DropdownProps> = ({ name, initialList, label, limit = 
 
 	const onSelect = useCallback((selectedItem: IListItem) => {
 		setActiveIndex(0)
-		setSelectedItems(selectedItems => selectedItems = [...selectedItems, selectedItem].slice(0, limit))
+		setSelectedItems(selectedItems => {
+			const newSelectedItems =  [...selectedItems, selectedItem].slice(0, limit)
+			setField(newSelectedItems)
+			return newSelectedItems
+		})
 		setValue("")
-		setField(value)
 		setList(initialList)
 		onClose()
 		if (inputRef.current) {
 			inputRef.current.focus()
 		}
-	}, [])
+	}, [selectedItems])
 
 	const deleteSelectedItem = useCallback((id: number) => {
-		setSelectedItems(selectedItems => selectedItems = selectedItems.filter((item) => item.id !== id))
+		setSelectedItems(selectedItems => {
+			const newSelectedItems = selectedItems.filter((item) => item.id !== id)
+			setField(newSelectedItems)
+			return newSelectedItems
+		})
 	}, [])
 
 	const onToggle = () => {
@@ -153,7 +160,7 @@ export const Dropdown: FC<DropdownProps> = ({ name, initialList, label, limit = 
 	return (
 		<Label label={label} name={name}>
 			<div ref={dropdownRef} className={`${s.dropdown} ${isOpen ? s.open : ""} ${className}`}>
-				<button type={"button"} onClick={onToggle} className={s.button} ><img src={arrow} className={s.arrow} alt={"close"}/></button>
+				<button type={"button"} onClick={onToggle} tabIndex={-1} className={s.button} ><img src={arrow} className={s.arrow} alt={"close"}/></button>
 				<div className={s.input} onClick={onOpen}>
 					<SelectedItems onClick={onClose} inputRef={inputRef} setSelectedItems={setSelectedItems}
 						isDisallowNavigation={isDisallowNavigation} selectedItems={selectedItems}
@@ -161,13 +168,13 @@ export const Dropdown: FC<DropdownProps> = ({ name, initialList, label, limit = 
 
 					<Input disabled={device === "MOBILE"} placeholder={isNothingSelected ? placeholder : ""} onFocus={onOpen} setCaretPosition={setCaretPosition} classNameWrapper={s.innerInput}
 						variant={"clear"} ref={inputRef} setValue={setValue} value={value} onClick={onOpen}
-						name={name}/>
+					/>
 				</div>
 				{device === "DESKTOP" && isOpen &&
 					<UnsortedList inputRef={inputRef} list={list} setActiveIndex={setActiveIndex} activeIndex={activeIndex} onSelect={onSelect} className={s.list}/>
 				}
 				{device === "MOBILE"  &&
-                    <MobileList selectedItems={selectedItems} setSelectedItems={setSelectedItems} list={list} setList={setList} onChange={filterWithoutItemsAndSetList} isOpen={isOpen} onClose={onClose} title={placeholder || ""}/>
+                    <MobileList name={name} selectedItems={selectedItems} setSelectedItems={setSelectedItems} list={list} setList={setList} onChange={filterWithoutItemsAndSetList} isOpen={isOpen} onClose={onClose} title={placeholder || ""}/>
 				}
 			</div>
 		</Label>

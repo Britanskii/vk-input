@@ -1,0 +1,16 @@
+.button {
+    cursor: pointer;
+    border: none;
+    border-radius: var(--border-radius-s);
+    background-color: var(--secondary-color);
+    padding: 0 16px;
+    width: fit-content;
+    height: 32px;
+    color: var(--main-color);
+    font-size: var(--font-size-m)
+}
+
+.button:hover, .button:focus {
+    opacity: 0.8;
+    outline: none;
+}

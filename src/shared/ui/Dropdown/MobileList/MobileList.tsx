@@ -6,6 +6,7 @@ import { Modal } from "../../Modal/Modal"
 import { IListItem } from "../Dropdown"
 import { MobileListItem } from "./MobileListItem/MobileListItem"
 import { ReactComponent as SearchIcon } from "../../../assets/icons/search.svg"
+import { useForm } from "../../../context/formContext/lib/useForm"
 
 interface MobileListProps {
     title: string
@@ -14,6 +15,7 @@ interface MobileListProps {
 	setList: (list: IListItem[]) => void
 	onChange: (value: string) => void
 	list: IListItem[]
+	name: string
 	setSelectedItems: Dispatch<SetStateAction<IListItem[]>>
 	selectedItems: IListItem[]
 }
@@ -23,11 +25,13 @@ const mergeListsUnique = (firstList: IListItem[], secondList: IListItem[]) => {
 		!firstList.some((selectedItem) => selectedItem.id === item.id))]
 }
 
-export const MobileList: FC<MobileListProps> = ({ title,  list, selectedItems, setSelectedItems, onChange, isOpen, onClose }) => {
+export const MobileList: FC<MobileListProps> = ({ title,  list, name, selectedItems, setSelectedItems, onChange, isOpen, onClose }) => {
 	const [innerSelectedItems, setInnerSelectedItems] = useState<IListItem[]>(selectedItems)
 	const [firstSelectedItemsList, setFirstSelectedItemsList] = useState<IListItem[]>(list)
 	const [value, setValue] = useState("")
 	const inputRef = useRef<HTMLInputElement>(null)
+
+	const { setField } = useForm(name)
 
 	const onReturnSelectedItemsState = useCallback( () => {
 		onClose()
@@ -44,6 +48,7 @@ export const MobileList: FC<MobileListProps> = ({ title,  list, selectedItems, s
 		setValue("")
 		setFirstSelectedItemsList(mergeListsUnique(innerSelectedItems, list))
 		setSelectedItems(innerSelectedItems)
+		setField(innerSelectedItems)
 	}, [innerSelectedItems])
 
 	useEffect(() => {

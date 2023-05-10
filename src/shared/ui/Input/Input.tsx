@@ -23,7 +23,7 @@ type InputVariant = ValueOf<typeof InputVariant>
 interface InputProps<T> extends HTMLInputProps {
 	className?: string
 	classNameWrapper?: string
-	name: Extract<keyof T, string>
+	name?: Extract<keyof T, string>
 	variant?: InputVariant
 	value?: string
 	setValue?: (value: string) => void
@@ -32,14 +32,14 @@ interface InputProps<T> extends HTMLInputProps {
 }
 
 const InputRef = forwardRef(<T,>(props: InputProps<T>, ref: ForwardedRef<HTMLInputElement>) => {
-	const { name, icon, variant = InputVariant.DEFAULT, className = "", classNameWrapper= "",  value = "", setValue, setCaretPosition, ...otherProps } = props
+	const { name, icon, variant = InputVariant.DEFAULT, className = "", classNameWrapper= "",  value = "",  setValue, setCaretPosition, ...otherProps } = props
 	const [innerValue, setInnerValue] = useState("")
 
 	const { setField } = useForm<T>(name)
 
 	const onChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
-		setField(value)
+		if (name) setField(value)
 		setInnerValue(value)
 		setValue?.(value)
 	}

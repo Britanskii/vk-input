@@ -1,0 +1,22 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.title {
+    text-align: center;
+    font-size: var(--font-size-b);
+    color: var(--subhead-color);
+    font-weight: normal;
+}
+
+.submit {
+    margin-left: auto;
+}
+
+@media (max-width: 800px) {
+    .form {
+        gap: 20px;
+    }
+}
