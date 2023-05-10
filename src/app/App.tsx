@@ -25,11 +25,11 @@ const App = () => {
 	return(
 		<div className={s.app}>
 			<FormProvider>
-				<Label label={"Имя"} name={"name"}>
-					<Input placeholder={"Ваше имя"} name={"name"}/>
+				<Label label={"Name"} name={"name"}>
+					<Input placeholder={"Your name"} name={"name"}/>
 				</Label>
-				<Dropdown label={"Цитаты"} placeholder={"Выбор цитаты"} initialList={albumList} name={"drop"}/>
-				<Dropdown label={"Знакомые"}  placeholder={"Выбор знакомого"} initialList={userList} name={"drop"}/>
+				<Dropdown label={"Quotes"} placeholder={"Quote select"} initialList={albumList} name={"quotes"}/>
+				<Dropdown label={"Favorites"}  placeholder={"Favorite select"} initialList={userList} name={"favorites"}/>
 			</FormProvider>
 		</div>
 	)

@@ -13,43 +13,27 @@ interface ModalProps {
 	isOpen: boolean
 	onSubmit?: () => void
 	onClose?: () => void
-	closeFunction?: () => void
 	lazy?: boolean
 }
 
-const ANIMATION_DELAY = 300
-
 export const Modal: FC<ModalProps> = (props) => {
-	const { children, isOpen, onClose,  onSubmit, closeFunction, title, full = false, lazy = true, className = "" } = props
+	const { children, isOpen, onClose,  onSubmit, title, full = false, lazy = true, className = "" } = props
 
 	const [isMounted, setIsMounted] = useState(false)
-	const [isClosing, setIsClosing] = useState(false)
 
 	const timeRef = useRef<ReturnType<typeof setTimeout>>()
 
 	const mods: Record<string, boolean> = {
 		[s.opened]: isOpen,
-		[s.isClosing]: isClosing,
 		[s.full]: full
 	}
 
-	const closeAnimation = () => {
-		if (onClose) {
-			setIsClosing(true)
-			timeRef.current = setTimeout(() => {
-				onClose()
-				setIsClosing(false)
-			}, ANIMATION_DELAY)
-		}
-	}
-
 	const closeHandler = () => {
-		closeFunction?.()
-		closeAnimation()
+		onClose?.()
 	}
 
 	const submitHandler = () => {
-		closeAnimation()
+		closeHandler()
 		onSubmit?.()
 	}
 
@@ -59,7 +43,7 @@ export const Modal: FC<ModalProps> = (props) => {
 
 	const onKeyDown = (event: KeyboardEvent) => {
 		if (event.key === "Escape") {
-			closeAnimation()
+			closeHandler()
 		}
 	}
 
@@ -82,12 +66,12 @@ export const Modal: FC<ModalProps> = (props) => {
 	return (
 		<Portal>
 			<div className = {classNames([s.modal, className], mods)}>
-				<div className={s.overlay} onClick={closeAnimation}>
+				<div className={s.overlay} onClick={closeHandler}>
 					<div className={s.content} onClick={onContentClick}>
 						<div className={s.navigation}>
-							<div className={s.close} onClick={closeHandler}>Cancel</div>
+							<button type={"button"} className={s.close} onClick={closeHandler}>Cancel</button>
 							<div className={s.title}>{title}</div>
-							<div className={s.select} onClick={submitHandler}>Done</div>
+							<button type={"button"}  className={s.select} onClick={submitHandler}>Done</button>
 						</div>
 						{children}
 					</div>

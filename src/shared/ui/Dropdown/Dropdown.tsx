@@ -109,7 +109,6 @@ export const Dropdown: FC<DropdownProps> = ({ name, initialList, label, limit = 
 	const filterAndSetList = (query: string) => setList(filterListItem(query, initialList, selectedItems))
 	const filterWithoutItemsAndSetList = (query: string) => {
 		const result = filterListItem(query, initialList)
-		console.log(result)
 		setList(result)
 	}
 
@@ -154,20 +153,20 @@ export const Dropdown: FC<DropdownProps> = ({ name, initialList, label, limit = 
 	return (
 		<Label label={label} name={name}>
 			<div ref={dropdownRef} className={`${s.dropdown} ${isOpen ? s.open : ""} ${className}`}>
-				<img src={arrow} className={s.arrow} onClick={onToggle} alt={"close"}/>
+				<button type={"button"} onClick={onToggle} className={s.button} ><img src={arrow} className={s.arrow} alt={"close"}/></button>
 				<div className={s.input} onClick={onOpen}>
 					<SelectedItems onClick={onClose} inputRef={inputRef} setSelectedItems={setSelectedItems}
 						isDisallowNavigation={isDisallowNavigation} selectedItems={selectedItems}
 						deleteSelectedItem={deleteSelectedItem}/>
 
-					<Input placeholder={isNothingSelected ? placeholder : ""} onFocus={onOpen} setCaretPosition={setCaretPosition} className={s.innerInput}
+					<Input disabled={device === "MOBILE"} placeholder={isNothingSelected ? placeholder : ""} onFocus={onOpen} setCaretPosition={setCaretPosition} classNameWrapper={s.innerInput}
 						variant={"clear"} ref={inputRef} setValue={setValue} value={value} onClick={onOpen}
 						name={name}/>
 				</div>
 				{device === "DESKTOP" && isOpen &&
 					<UnsortedList inputRef={inputRef} list={list} setActiveIndex={setActiveIndex} activeIndex={activeIndex} onSelect={onSelect} className={s.list}/>
 				}
-				{device === "MOBILE" &&
+				{device === "MOBILE"  &&
                     <MobileList selectedItems={selectedItems} setSelectedItems={setSelectedItems} list={list} setList={setList} onChange={filterWithoutItemsAndSetList} isOpen={isOpen} onClose={onClose} title={placeholder || ""}/>
 				}
 			</div>

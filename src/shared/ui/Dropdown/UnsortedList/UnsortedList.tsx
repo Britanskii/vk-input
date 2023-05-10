@@ -52,7 +52,7 @@ export const UnsortedList: FC<UnsortedListProps> = memo(({ onSelect, inputRef, s
 				const active = activeIndex === index
 
 				return <ListItem inputRef={inputRef} unsortedRef={unsortedRef} setActiveIndex={setActiveIndex} active={active} index={index} onSelect={onSelect} key={item.id} item={item}/>})}
-			{isListZeroLength && <li className={s.none}>Ничего не было найдено</li>}
+			{isListZeroLength && <li className={s.none}>No results found</li>}
 		</ul>
 	)
 })

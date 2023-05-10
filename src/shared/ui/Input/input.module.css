@@ -1,7 +1,20 @@
 .wrapper {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    position: relative;
+    width: 100%;
+}
+
+.icon * {
+    pointer-events: none;
+    z-index: 1;
+    position: absolute;
+    top: 12px;
+    left: 13px;
+    width: 15px;
+    height: 15px;
+}
+
+.icon + input {
+    padding-left: 35px;
 }
 
 .clear, .default {
@@ -11,6 +24,10 @@
     outline: none;
 }
 
+.clear:disabled, .default:disabled {
+    background-color: var(--main-color);
+}
+
 .clear {
     border: none;
 }
@@ -18,4 +35,11 @@
 .default {
     border: 1px solid var(--separator-color);
     border-radius: var(--border-radius-s);
+}
+
+@media (max-width: 800px) {
+    .clear, .default {
+        padding: 8px 7px 9px 10px;
+        font-size: var(--font-size-rb);
+    }
 }

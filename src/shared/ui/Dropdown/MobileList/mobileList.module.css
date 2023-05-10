@@ -1,7 +1,17 @@
 .list {
     overflow-y: auto;
     height: 100%;
-    margin-top: 10px;
+    padding-top: 10px;
     display: flex;
     flex-direction: column;
+}
+
+.input {
+    background-color: var(--second-color);
+    font-size: var(--font-size-b);
+    border: none;
+}
+
+.icon {
+    opacity: 0.4;
 }

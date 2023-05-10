@@ -22,15 +22,17 @@ type InputVariant = ValueOf<typeof InputVariant>
 
 interface InputProps<T> extends HTMLInputProps {
 	className?: string
+	classNameWrapper?: string
 	name: Extract<keyof T, string>
 	variant?: InputVariant
 	value?: string
 	setValue?: (value: string) => void
+	icon?: JSX.Element
 	setCaretPosition?: (value: number) => void
 }
 
 const InputRef = forwardRef(<T,>(props: InputProps<T>, ref: ForwardedRef<HTMLInputElement>) => {
-	const { name, variant = InputVariant.DEFAULT, className = "",  value = "", setValue, setCaretPosition, ...otherProps } = props
+	const { name, icon, variant = InputVariant.DEFAULT, className = "", classNameWrapper= "",  value = "", setValue, setCaretPosition, ...otherProps } = props
 	const [innerValue, setInnerValue] = useState("")
 
 	const { setField } = useForm<T>(name)
@@ -51,17 +53,20 @@ const InputRef = forwardRef(<T,>(props: InputProps<T>, ref: ForwardedRef<HTMLInp
 	}
 
 	return (
-		<input
-			{...otherProps}
-			autoComplete="off"
-			ref={ref && ref}
-			name={name}
-			onSelect={onCaretClick}
-			onChange={onChange}
-			value={innerValue}
-			className={`${s[variant]} ${className}`}
-			type="text"
-		/>
+		<div className={`${s.wrapper} ${classNameWrapper}`}>
+			{icon && <div className={s.icon}>{icon}</div>}
+			<input
+				{...otherProps}
+				autoComplete="off"
+				ref={ref && ref}
+				name={name}
+				onSelect={onCaretClick}
+				onChange={onChange}
+				value={innerValue}
+				className={`${s[variant]} ${className}`}
+				type="text"
+			/>
+		</div>
 	)
 })
 

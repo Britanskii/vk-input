@@ -10,3 +10,9 @@
     padding: 20px;
     border: 1px solid var(--separator-color);
 }
+
+@media (max-width: 800px) {
+    .app {
+        gap: 20px;
+    }
+}

@@ -1,40 +1,40 @@
 import s from "./mobileListItem.module.css"
 
-import { FC, memo, useEffect, useState } from "react"
+import { Dispatch, FC, memo, SetStateAction,  useEffect, useState } from "react"
 import { IListItem } from "../../Dropdown"
 import { Checkbox } from "../../../Checkbox/Checkbox"
 
 interface MobileListItemProps {
     item: IListItem
-	onSelect: (item: IListItem) => void
+	setInnerSelectedItems: Dispatch<SetStateAction<IListItem[]>>
 	deleteSelectedItem: (id: number) => void
-	selectedItems: IListItem[]
+	active: boolean
 }
 
-export const MobileListItem: FC<MobileListItemProps> = memo(({ item, selectedItems, onSelect, deleteSelectedItem }) => {
-	const [active, setActive] = useState(false)
+export const MobileListItem: FC<MobileListItemProps> = memo(({ item, active, setInnerSelectedItems, deleteSelectedItem }) => {
+	const [isActive, setIsActive] = useState(false)
 
 	useEffect(() => {
-		if (selectedItems.find(selected => selected.id === item.id)) {
-			setActive(true)
-		} else {
-			setActive(false)
-		}
-	}, [selectedItems])
+		setIsActive(active)
+	}, [active])
+
+	const onSelect = (item: IListItem) => {
+		setInnerSelectedItems(selectedItems => selectedItems = [...selectedItems, item])
+	}
 
 	const onToggle = () => {
-		if (active) {
-			setActive(false)
+		if (isActive) {
+			setIsActive(false)
 			deleteSelectedItem(item.id)
 		} else {
-			setActive(true)
+			setIsActive(true)
 			onSelect(item)
 		}
 	}
 
 	return (
 		<li onClick={onToggle} className = {s.item}>
-			<Checkbox setActive={setActive} active={active}/>
+			<Checkbox setActive={setIsActive} active={isActive}/>
 			{item.value}
 		</li>
 	)

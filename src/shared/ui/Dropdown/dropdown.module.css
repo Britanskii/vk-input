@@ -8,16 +8,21 @@
     z-index: var(--drop-z-index);
 }
 
-.dropdown.open .arrow {
-    transform: rotate(180deg);
+.button {
+    z-index: 1;
+    background-color: transparent;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+    border: none;
+    padding: 5px;
+    display: flex;
+    align-items: center;
 }
 
-.arrow {
-    margin-top: 5px;
-    cursor: pointer;
-    position: absolute;
-    right: 10px;
-    padding: 5px;
+.dropdown.open .arrow {
+    transform: rotate(180deg);
 }
 
 .input {

@@ -1,10 +1,11 @@
 import s from "./mobileList.module.css"
-import React, { Dispatch, FC, SetStateAction, useCallback, useEffect, useState } from "react"
+import React, { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, useState } from "react"
 import { Input } from "../../Input/Input"
 
 import { Modal } from "../../Modal/Modal"
 import { IListItem } from "../Dropdown"
 import { MobileListItem } from "./MobileListItem/MobileListItem"
+import { ReactComponent as SearchIcon } from "../../../assets/icons/search.svg"
 
 interface MobileListProps {
     title: string
@@ -17,14 +18,23 @@ interface MobileListProps {
 	selectedItems: IListItem[]
 }
 
-export const MobileList: FC<MobileListProps> = ({ title, list, selectedItems, setSelectedItems, onChange, isOpen, onClose }) => {
+const mergeListsUnique = (firstList: IListItem[], secondList: IListItem[]) => {
+	return [...firstList, ...secondList.filter((item) =>
+		!firstList.some((selectedItem) => selectedItem.id === item.id))]
+}
+
+export const MobileList: FC<MobileListProps> = ({ title,  list, selectedItems, setSelectedItems, onChange, isOpen, onClose }) => {
 	const [innerSelectedItems, setInnerSelectedItems] = useState<IListItem[]>(selectedItems)
+	const [firstSelectedItemsList, setFirstSelectedItemsList] = useState<IListItem[]>(list)
 	const [value, setValue] = useState("")
+	const inputRef = useRef<HTMLInputElement>(null)
 
 	const onReturnSelectedItemsState = useCallback( () => {
+		onClose()
 		setValue("")
+		setFirstSelectedItemsList(selectedItems)
 		setInnerSelectedItems(selectedItems)
-	}, [innerSelectedItems])
+	}, [selectedItems])
 
 	const deleteInnerSelectedItem = useCallback((id: number) => {
 		setInnerSelectedItems(innerSelectedItems => innerSelectedItems = innerSelectedItems.filter((item) => item.id !== id))
@@ -32,27 +42,34 @@ export const MobileList: FC<MobileListProps> = ({ title, list, selectedItems, se
 
 	const onSubmit = useCallback(() => {
 		setValue("")
+		setFirstSelectedItemsList(mergeListsUnique(innerSelectedItems, list))
 		setSelectedItems(innerSelectedItems)
 	}, [innerSelectedItems])
 
-	const onSelect = useCallback((item: IListItem) => {
-		setInnerSelectedItems(selectedItems => selectedItems = [...selectedItems, item])
-	}, [])
+	useEffect(() => {
+		onChange(value)
+	}, [value])
 
 	useEffect(() => {
 		setInnerSelectedItems(selectedItems)
 	}, [selectedItems])
 
 	useEffect(() => {
-		onChange(value)
-	}, [value])
+		if (isOpen) {
+			setFirstSelectedItemsList(mergeListsUnique(selectedItems, list))
+		}
+	}, [isOpen, selectedItems, list])
+
 
 	return (
-		<Modal title={title} full={true} isOpen={isOpen} closeFunction={onReturnSelectedItemsState} onClose={onClose} onSubmit={onSubmit}>
-			<Input placeholder={"Поиск"} value={value} setValue={setValue} name={"name"}/>
+		<Modal title={title} full={true} isOpen={isOpen} onClose={onReturnSelectedItemsState} onSubmit={onSubmit}>
+			<Input icon={<SearchIcon className={s.icon}/>} ref={inputRef} placeholder={"Search"} value={value} setValue={setValue} name={"name"} className={s.input}/>
 			<ul className={s.list}>
-				{list.map((item) =>
-					<MobileListItem selectedItems={innerSelectedItems} key={item.id} item={item} deleteSelectedItem={deleteInnerSelectedItem} onSelect={onSelect}/>)}
+				{firstSelectedItemsList.map((item) => {
+					const active = 	!!innerSelectedItems.find(selected => selected.id === item.id)
+
+					return <MobileListItem active={active} key={item.id} item={item} deleteSelectedItem={deleteInnerSelectedItem} setInnerSelectedItems={setInnerSelectedItems}/>
+				})}
 			</ul>
 		</Modal>
 	)
